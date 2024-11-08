@@ -1,0 +1,37 @@
+---
+- name: Configuración Ansible
+  hosts: all
+  become: true
+  tasks:
+    - name: Actualizar apt-get y software-properties-common
+      apt:
+        name: software-properties-common
+        state: present
+        update_cache: yes
+
+    - name: Instalar Nginx
+      apt:
+        name: nginx
+        state: present
+        
+    - name: Cargar index.html
+      copy:
+        src: /vagrant/index.html
+        dest: /var/www/html/index.html
+        owner: www-data
+        group: www-data
+        mode: '0644'
+    
+    - name: Cargar imagen
+      copy:
+        src: /vagrant/img-uao.jpg
+        dest: /var/www/html/img-uao.jpg
+        owner: www-data
+        group: www-data
+        mode: '0644'
+
+    - name: Iniciar y habilitar Nginx
+      service:
+        name: nginx
+        state: started
+        enabled: true
