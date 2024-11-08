@@ -2,6 +2,28 @@
 - hosts: monitoring_server
   become: yes  # Para ejecutar tareas como superusuario
   tasks:
+    - name: Instalar dependencias
+      apt:
+        name: 
+          - software-properties-common
+          - apt-transport-https
+        state: present
+        update_cache: yes
+
+    - name: Agregar la clave GPG de Grafana
+      apt_key:
+        url: https://packages.grafana.com/gpg.key
+        state: present
+
+    - name: Agregar el repositorio de Grafana
+      apt_repository:
+        repo: "deb https://apt.grafana.com stable main"
+        state: present
+
+    - name: Actualizar la caché de APT
+      apt:
+        update_cache: yes
+
     - name: Instalar Prometheus
       apt:
         name: prometheus
