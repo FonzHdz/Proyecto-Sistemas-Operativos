@@ -1,0 +1,29 @@
+---
+- name: Configuración Ansible
+  hosts: all
+  become: true
+  tasks:
+    - name: Actualizar apt-get y software-properties-common
+      apt:
+        name: software-properties-common
+        state: present
+        update_cache: yes
+
+    - name: Instalar Apache
+      apt:
+        name: apache2
+        state: present
+        
+    - name: Cargar index.html
+      copy:
+        src: /vagrant/index.html
+        dest: /var/www/html/index.html
+        owner: www-data
+        group: www-data
+        mode: '0644'
+
+    - name: Iniciar Apache
+      service:
+        name: apache2
+        state: started
+        enabled: true
