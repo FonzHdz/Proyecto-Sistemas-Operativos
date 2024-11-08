@@ -1,29 +1,27 @@
 ---
-- name: Configuración Ansible
-  hosts: all
-  become: true
+- hosts: monitoring_server
+  become: yes  # Para ejecutar tareas como superusuario
   tasks:
-    - name: Actualizar apt-get y software-properties-common
+    - name: Instalar Prometheus
       apt:
-        name: software-properties-common
+        name: prometheus
         state: present
         update_cache: yes
 
-    - name: Instalar Apache
-      apt:
-        name: apache2
-        state: present
-        
-    - name: Cargar index.html
-      copy:
-        src: /vagrant/index.html
-        dest: /var/www/html/index.html
-        owner: www-data
-        group: www-data
-        mode: '0644'
-
-    - name: Iniciar Apache
+    - name: Iniciar Prometheus
       service:
-        name: apache2
+        name: prometheus
         state: started
-        enabled: true
+        enabled: yes
+
+    - name: Instalar Grafana
+      apt:
+        name: grafana
+        state: present
+        update_cache: yes
+
+    - name: Iniciar Grafana
+      service:
+        name: grafana-server
+        state: started
+        enabled: yes
