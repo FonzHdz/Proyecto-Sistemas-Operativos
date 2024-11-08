@@ -14,7 +14,8 @@ Vagrant.configure("2") do |config|
   # boxes at https://vagrantcloud.com/search.
   config.vm.define "monitoring_server" do |monitoring|
     monitoring.vm.box = "ubuntu/focal64"  # Usando Ubuntu 20.04 LTS
-    monitoring.vm.network "private_network", ip: "192.168.33.20"
+    config.vm.network "forwarded_port", guest: 3000, host: 3000, host_ip: "127.0.0.1"  # Para Grafana
+    config.vm.network "forwarded_port", guest: 9090, host: 9090, host_ip: "127.0.0.1"  # Para Prometheus
 
     # Disable automatic box update checking. If you disable this, then
     # boxes will only be checked for updates when the user runs
